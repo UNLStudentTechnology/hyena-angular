@@ -21,13 +21,13 @@ module.exports = function(grunt) {
       dist: {
         files: {
           /* Target : Source */
-          'dist/hyena-angular.min.js': ['hyena-angular.js']
+          'dist/hyena-angular.min.js': ['hyena-angular.js', 'src/**/*.js']
         }
       }
     },
     watch: {
-      styles: {
-        files: ['hyena-angular.js'], // which files to watch
+      js: {
+        files: ['src/**/*.js'], // which files to watch
         tasks: ['uglify'],
         options: {
           nospawn: true
