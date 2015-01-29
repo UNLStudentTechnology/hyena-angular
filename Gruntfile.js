@@ -30,7 +30,7 @@ module.exports = function(grunt) {
         files: ['src/**/*.js'], // which files to watch
         tasks: ['uglify'],
         options: {
-          nospawn: true
+          mangle: false
         }
       }
     }
