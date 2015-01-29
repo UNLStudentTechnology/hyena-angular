@@ -1,0 +1,25 @@
+{
+  "name": "hyena-angular",
+  "main": "dist/hyena-angular.min.js",
+  "version": "0.1.0-beta.1",
+  "authors": [
+    "Hayden Gascoigne <haydengascoigne@gmail.com>"
+  ],
+  "description": "A collection of services, filters, and directives for UNL's Hyena Platform",
+  "keywords": [
+    "unl",
+    "hyena",
+    "student",
+    "technology",
+    "angular"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/UNLStudentTechnology",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

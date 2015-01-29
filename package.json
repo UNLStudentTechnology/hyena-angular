@@ -1,0 +1,23 @@
+{
+  "name": "hyena-angular",
+  "version": "0.1.0-beta.1",
+  "description": "A collection of services, filters, and directives for UNL's Hyena Platform",
+  "main": "dist/hyena-angular.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "unl",
+    "hyena",
+    "student",
+    "technology",
+    "angular"
+  ],
+  "author": "Hayden Gascoigne",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bump": "0.0.16",
+    "grunt-contrib-uglify": "^0.7.0"
+  }
+}
