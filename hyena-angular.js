@@ -2,7 +2,10 @@
 'format global'; /* global define */
 'deps angular';
 
-angular.module("hyenaAngular", [])
+angular.module("hyenaAngular", [
+		'ngStorage',
+		'firebase'
+	])
 	.constant('AUTH_EVENTS', {
 		loginSuccess: 'auth-login-success',
 		loginFailed: 'auth-login-failed',

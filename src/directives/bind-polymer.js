@@ -1,4 +1,4 @@
-angular.module("hyenaAngular", [])
+angular.module("hyenaAngular")
 	/**
 	 * Binds reflected Polymer attributes to an Angular scope variable.
 	 */

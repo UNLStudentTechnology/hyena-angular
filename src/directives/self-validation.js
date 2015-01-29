@@ -1,4 +1,4 @@
-angular.module("hyenaAngular", [])
+angular.module("hyenaAngular")
 	/**
 	 * Input types for self-validation directive.
 	 */

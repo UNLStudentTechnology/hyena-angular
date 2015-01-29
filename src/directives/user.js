@@ -1,4 +1,4 @@
-angular.module("hyenaAngular", [])
+angular.module("hyenaAngular")
 	/**
 	 * Replaces a Hyena username with a full user object.
 	 */

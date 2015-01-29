@@ -1,5 +1,5 @@
 'use strict';
-angular.module("hyenaAngular", [])
+angular.module("hyenaAngular")
 	/**
 	 * Returns a pretty version of the uni_year code from Hyena.
 	 * @return string   Pretty Year
