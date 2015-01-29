@@ -22,6 +22,9 @@ module.exports = function(grunt) {
         files: {
           /* Target : Source */
           'dist/hyena-angular.min.js': ['hyena-angular.js', 'src/**/*.js']
+        },
+        options: {
+          mangle: false
         }
       }
     },
@@ -30,7 +33,7 @@ module.exports = function(grunt) {
         files: ['src/**/*.js'], // which files to watch
         tasks: ['uglify'],
         options: {
-          mangle: false
+          nospawn: true
         }
       }
     }
