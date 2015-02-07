@@ -4,7 +4,8 @@
 
 angular.module("hyenaAngular", [
 		'ngStorage',
-		'firebase'
+		'firebase',
+		'ngTagsInput'
 	])
 	.constant('AUTH_EVENTS', {
 		loginSuccess: 'auth-login-success',

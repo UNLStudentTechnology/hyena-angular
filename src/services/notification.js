@@ -18,10 +18,11 @@ angular.module('hyenaAngular')
         toast.show();
       },
 
-      showModal: function(heading, content) {
+      showModal: function(heading, content, type) {
         var modal = document.querySelector('#unl-modal');
         var newContent = document.querySelector(content);
         modal.setAttribute("heading", heading);
+        modal.setAttribute("type", type || 'lift');
         modal.contents = newContent;
         modal.show();
       },
