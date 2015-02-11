@@ -9,11 +9,49 @@
  * REQUIRES the session and user service.
  */
 angular.module('hyenaAngular')
-  .service('AuthService', function ($http, $sessionStorage, $localStorage, UserService, APIKEY, APIPATH, AppFirebase) {
+  .service('AuthService', function ($http, $sessionStorage, $localStorage, $location, $q, UserService, APIKEY, APIPATH, AppFirebase) {
     var firebaseAuthRef = AppFirebase.getRef();
 
     var AuthService = {
 
+      flow: function(scope) {
+        scope = scope || "";
+        var deferred = $q.defer();
+
+        if(angular.isDefined($location.search().token)) //If this is new log in from CAS
+        {
+          //Get Query Params
+          var authToken = $location.search().token;
+          $location.url($location.path()); //Clear query params from address bar
+          //Evaluate token from platform
+          var tokenUser = AppFirebase.authenticate(authToken).then(function(authData) {
+            //Process the user login
+            AuthService.manualLogin(authData.uid, authToken, scope).then(function(user) {
+              deferred.resolve(user.data);
+              $scope.currentUser = user.data;
+            }, function(error) {
+              deferred.reject(error);
+              console.log('Login failed:', error);
+            });
+          }, function(error) {
+            deferred.reject(error);
+            console.error("Login failed:", error);
+          });
+        }
+        else if(AuthService.check() && AppFirebase.getAuthRef().$getAuth() !== null) //Already authenticated, attempt to get existing session
+        {
+          AuthService.user(scope).then(function(user) {
+            deferred.resolve(user.data);
+          });
+        }
+        else
+        {
+          AuthService.login(); //Start the CAS flow
+        }
+
+        return deferred.promise;
+      },
+ 
       /**
        * Starts the CAS authorization flow.
        * WARNING: This is a redirect, not http request. This will leave current app flow.
