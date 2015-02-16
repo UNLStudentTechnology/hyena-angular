@@ -35,6 +35,19 @@ angular.module('hyenaAngular')
 				);
 			},
 			/**
+		     * Returns a clean array to be exported to CSV
+		     * @return array Array of users
+		     */
+		   	export: function export(array) {
+		   		var exportArray = angular.copy(array);
+				for (var i = 0; i < exportArray.length; i++) {
+					delete exportArray[i].pivot;
+					delete exportArray[i].id;
+					delete exportArray[i].profile_image;
+				}
+				return exportArray;
+		    },
+			/**
 			 * Replaces user ids (BB Usernames) in an array with a full user object from platform.
 			 * @param  Array array  Array in which to loop over and replace
 			 * @param  String key   Array key in which to get user ids from

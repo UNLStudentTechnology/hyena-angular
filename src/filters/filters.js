@@ -17,6 +17,8 @@ angular.module("hyenaAngular")
 					return "Senior";
 				case "GR" :
 					return "Graduate";
+				case "staff" :
+					return "Staff";
 				default :
 					return "N/A";
 			}
