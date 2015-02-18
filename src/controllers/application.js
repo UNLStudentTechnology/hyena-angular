@@ -87,6 +87,20 @@ angular.module("hyenaAngular")
     };
 
     /**
+     * Forces the drawer to hide even on large screens
+     */
+    $scope.hideMainDrawer = function() {
+      document.querySelector('unl-layout').forceHideDrawer();
+    };
+
+    /**
+     * Forces the drawer to show even on large screens
+     */
+    $scope.showMainDrawer = function() {
+      document.querySelector('unl-layout').forceShowDrawer();
+    };
+
+    /**
      * Callback function to show the login modal window.
      */
     $scope.showLoginWindow = function() {
