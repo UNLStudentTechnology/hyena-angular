@@ -9,30 +9,39 @@
  * Controller of the hyenaAppsApp
  */
 angular.module("hyenaAngular")
-  .controller('ApplicationCtrl', function ($rootScope, $scope, $location, $window, $routeParams, $firebase, AuthService, UserService, AppFirebase, Notification, FBURL, AUTH_EVENTS, AUTH_SCOPE) {
+  .controller('ApplicationCtrl', function ($rootScope, $scope, $location, $state, $window, $firebase, AuthService, UserService, AppFirebase, Notification, FBURL, AUTH_EVENTS, AUTH_SCOPE) {
     //Initialize some variables
     $scope.appLoaded = null;
     $scope.currentUser = null;
     $rootScope.currentGroupId = 0;
 
-    //Start auth flow
-    AuthService.flow(AUTH_SCOPE).then(function(response) {
-      $scope.appLoaded = true;
-      $scope.currentUser = response;
-    }, function(response) {
-      console.error('There was an error logging in.');
+    /**
+     * Checks to see if the requireAuth param is set on the state.
+     * If it is, it will go through the auth flow and attach auth events.
+     */
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+      if(angular.isDefined(toState.data.requireAuth) && toState.data.requireAuth)
+      {
+        if($scope.currentUser === null)
+        {
+          //Start auth flow
+          AuthService.flow(AUTH_SCOPE).then(function(response) {
+            $scope.appLoaded = true;
+            $scope.currentUser = response;
+          }, function(response) {
+            console.error('There was an error logging in.', response);
+          });
+        }
+      }
     });
 
-    /** 
-     * Event handler for when the user logs in or out. Hides the page and shows a modal
-     * prompting the user to log in.
+    /**
+     * Fired whenever a Firebase authenticated JWT expires.
      */
-    $scope.$watch('currentUser', function(newVal, oldVal) {
-      //console.log('currentUser', newVal, oldVal);
-      if(oldVal !== null && (angular.isUndefined(newVal) || newVal === null))
-        Notification.showModal('Please log in', '#modal-content-login', 'takeover');
-      else if(oldVal !== null)
-        Notification.hideModal();
+    AppFirebase.getAuthRef().$onAuth(function(authData) {
+      if ($state.current.data.requireAuth && !authData && $scope.currentUser) {
+        $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+      }
     });
     
     /**
@@ -40,15 +49,10 @@ angular.module("hyenaAngular")
      * cause the current authenticated session to expire.
      */
     $rootScope.$on(AUTH_EVENTS.notAuthenticated, function() {
-      AuthService.expire();
-      $scope.currentUser = null;
-      AuthService.login();
-    });
-
-    AppFirebase.getAuthRef().$onAuth(function(authData) {
-      if (!authData && $scope.appLoaded) {
-        $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-      }
+        AuthService.expire();
+        $scope.currentUser = null;
+        Notification.showModal('Please log in', '#modal-content-login', 'takeover');
+        AuthService.login();
     });
 
     /**

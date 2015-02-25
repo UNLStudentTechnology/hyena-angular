@@ -22,20 +22,19 @@ angular.module('hyenaAngular')
         {
           //Get Query Params
           var authToken = $location.search().token;
-          $location.url($location.path()); //Clear query params from address bar
           //Evaluate token from platform
           var tokenUser = AppFirebase.authenticate(authToken).then(function(authData) {
             //Process the user login
             AuthService.manualLogin(authData.uid, authToken, scope).then(function(user) {
+              $location.url($location.path()); //Clear query params from address bar
               deferred.resolve(user.data);
-              $scope.currentUser = user.data;
             }, function(error) {
               deferred.reject(error);
               console.log('Login failed:', error);
             });
           }, function(error) {
             deferred.reject(error);
-            console.error("Login failed:", error);
+            console.error("Failed to authenticate token:", error, authToken);
           });
         }
         else if(AuthService.check() && AppFirebase.getAuthRef().$getAuth() !== null) //Already authenticated, attempt to get existing session
