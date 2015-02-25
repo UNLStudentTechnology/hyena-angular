@@ -33,4 +33,9 @@ angular.module("hyenaAngular")
 		        return Object.defineProperty(obj[key], '$key', { enumerable: false, value: key});
 		      });
 		};
+	})
+	.filter('toBool', function () {
+		return function (value) {
+		  	return (value === 'true');
+		};
 	});

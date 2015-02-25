@@ -13,6 +13,7 @@ angular.module("hyenaAngular")
     //Initialize some variables
     $scope.appLoaded = null;
     $scope.currentUser = null;
+    $scope.requireAuth = null;
     $rootScope.currentGroupId = 0;
 
     /**
@@ -20,8 +21,12 @@ angular.module("hyenaAngular")
      * If it is, it will go through the auth flow and attach auth events.
      */
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+      //Set a global variable accessible in other controllers
+      $scope.requireAuth = toState.data.requireAuth;
+      //Check and see if we should authenticate
       if(angular.isDefined(toState.data.requireAuth) && toState.data.requireAuth)
       {
+        //No need to reauth if already authenticated
         if($scope.currentUser === null)
         {
           //Start auth flow
@@ -39,7 +44,7 @@ angular.module("hyenaAngular")
      * Fired whenever a Firebase authenticated JWT expires.
      */
     AppFirebase.getAuthRef().$onAuth(function(authData) {
-      if ($state.current.data.requireAuth && !authData && $scope.currentUser) {
+      if (!authData && $scope.currentUser) {
         $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
       }
     });
@@ -51,8 +56,11 @@ angular.module("hyenaAngular")
     $rootScope.$on(AUTH_EVENTS.notAuthenticated, function() {
         AuthService.expire();
         $scope.currentUser = null;
-        Notification.showModal('Please log in', '#modal-content-login', 'takeover');
-        AuthService.login();
+        if($scope.requireAuth)
+        {
+          Notification.showModal('Please log in', '#modal-content-login', 'takeover');
+          AuthService.login();
+        }
     });
 
     /**
