@@ -1,3 +1,7 @@
+/**
+ * Adapted from:
+ * https://github.com/eee-c/angular-bind-polymer
+ */
 angular.module("hyenaAngular")
 	/**
 	 * Binds reflected Polymer attributes to an Angular scope variable.
