@@ -21,13 +21,14 @@ angular.module("hyenaAngular")
      * If it is, it will go through the auth flow and attach auth events.
      */
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-      //Set a global variable accessible in other controllers
-      $scope.requireAuth = toState.data.requireAuth;
       //Check and see if we should authenticate
-      if(angular.isDefined(toState.data.requireAuth) && toState.data.requireAuth)
+      if(angular.isDefined(toState.data) && angular.isDefined(toState.data.requireAuth))
       {
+        //Set a global variable accessible in other controllers
+        $scope.requireAuth = toState.data.requireAuth;
+
         //No need to reauth if already authenticated
-        if($scope.currentUser === null)
+        if($scope.currentUser === null && toState.data.requireAuth)
         {
           //Start auth flow
           AuthService.flow(AUTH_SCOPE).then(function(response) {

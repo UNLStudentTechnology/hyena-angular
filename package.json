@@ -1,6 +1,6 @@
 {
   "name": "hyena-angular",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A collection of services, filters, and directives for UNL's Hyena Platform.",
   "main": "dist/hyena-angular.min.js",
   "scripts": {

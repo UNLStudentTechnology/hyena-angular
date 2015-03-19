@@ -60,6 +60,16 @@ angular.module('hyenaAngular')
 		usersRemove: function usersRemove(groupId, users) {
 			return $http.post(
 				APIPATH+'groups/'+groupId+'/users/delete?'+tokenString+'&'+apiString, users);
+		},
+		/**
+		 * Check if the user exists in a group
+		 * @param  int  	groupId
+		 * @param  string  	userId
+		 * @return promise
+		 */
+		hasUser: function hasUser(groupId, userId) {
+			return $http.get(
+				APIPATH+'groups/'+groupId+'/users/'+userId+'?'+apiString);
 		}
   	};
 
