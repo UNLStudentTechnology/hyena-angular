@@ -2,13 +2,16 @@
 
 /**
  * @ngdoc service
- * @name hyenaAppsApp.UserService
+ * @name hyenaAngular.UserService
  * @description
  * # UserService
- * Service in the hyenaAppsApp.
+ * Service in hyenaAngular.
  */
 angular.module('hyenaAngular')
-	.service('UserService', function (APIPATH, APIKEY, $http, toArrayFilter) {
+	.service('UserService', function (PLATFORM_ROOT, APIPATH, APIKEY, $http, toArrayFilter, $localStorage) {
+		var tokenString = 'token='+$localStorage.authToken;
+		var apiString = 'api_key='+APIKEY;
+
 		return {
 			/**
 			 * Gets a single user from the platform based on Blackboard user id.
@@ -22,6 +25,14 @@ angular.module('hyenaAngular')
 
 				return $http.get(
 					APIPATH+'users/'+userId+'?with='+scope+'&api_key='+APIKEY);
+			},
+			/**
+			 * Updates a user's first name and email address.
+			 * @param  string userId   Blackboard username
+			 * @return Promise
+			 */
+			update: function updateApp(userId, userData) {
+				return $http.put(APIPATH+'users/'+userId+'?'+tokenString+'&'+apiString, userData);
 			},
 			/**
 			 * Validates an NUID against the platform, returns Blackboard username.
