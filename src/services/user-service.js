@@ -8,11 +8,11 @@
  * Service in hyenaAngular.
  */
 angular.module('hyenaAngular')
-	.service('UserService', function (PLATFORM_ROOT, APIPATH, APIKEY, $http, toArrayFilter, $localStorage) {
+	.service('UserService', function UserService(PLATFORM_ROOT, APIPATH, APIKEY, $http, $q, toArrayFilter, $localStorage) {
 		var tokenString = 'token='+$localStorage.authToken;
 		var apiString = 'api_key='+APIKEY;
 
-		return {
+		var UserService = {
 			/**
 			 * Gets a single user from the platform based on Blackboard user id.
 			 * @param  string userId Blackboard username
@@ -31,7 +31,7 @@ angular.module('hyenaAngular')
 			 * @param  string userId   Blackboard username
 			 * @return Promise
 			 */
-			update: function updateApp(userId, userData) {
+			update: function updateUser(userId, userData) {
 				return $http.put(APIPATH+'users/'+userId+'?'+tokenString+'&'+apiString, userData);
 			},
 			/**
@@ -39,11 +39,31 @@ angular.module('hyenaAngular')
 			 * @param  Int user NUID number
 			 * @return Promise
 			 */
-			validate: function validate(user) {
+			validate: function validateUser(users) {
 				return $http.post(
 					APIPATH+'users/validate?api_key='+APIKEY, 
-					{ "ids": [ user ] }
+					{ "ids": [ users ] }
 				);
+			},
+			/**
+			 * Convenience function that validates an NUID and returns that user object.
+			 * @param  Int user NUID number
+			 * @return Promise
+			 */
+			validateAndGet: function validateAndGet(user) {
+				var deferred = $q.defer();
+
+				UserService.validate(user).then(function(response) {
+					UserService.get(response.data.users_validated[0]).then(function(user) {
+						deferred.resolve(user.data);
+					}, function(error) {
+						deferred.reject(error);
+					});
+				}, function(error) {
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
 			},
 			/**
 		     * Returns a clean array to be exported to CSV
@@ -52,6 +72,7 @@ angular.module('hyenaAngular')
 		   	export: function export(array) {
 		   		var exportArray = angular.copy(array);
 				for (var i = 0; i < exportArray.length; i++) {
+					delete exportArray[i].uni_ferpa;
 					delete exportArray[i].pivot;
 					delete exportArray[i].id;
 					delete exportArray[i].profile_image;
@@ -93,4 +114,6 @@ angular.module('hyenaAngular')
 
 			}
 		};
+
+		return UserService;
 	});

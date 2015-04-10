@@ -24,6 +24,20 @@ angular.module("hyenaAngular")
 			}
 		};
 	})
+	.filter('platform_role', function () {
+		return function (input) {
+			switch (input) {
+				case 0 :
+					return "Member";
+				case 41 :
+					return "Group Admin";
+				case 51 :
+					return "Group Staff";
+				default :
+					return "Member";
+			}
+		};
+	})
 	.filter('toArray', function () {
 		return function (obj) {
 		  	if (!(obj instanceof Object)) {

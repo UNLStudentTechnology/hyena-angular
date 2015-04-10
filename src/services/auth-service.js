@@ -26,7 +26,7 @@ angular.module('hyenaAngular')
           var tokenUser = AppFirebase.authenticate(authToken).then(function(authData) {
             //Process the user login
             AuthService.manualLogin(authData.uid, authToken, scope).then(function(user) {
-              $location.url($location.path()); //Clear query params from address bar
+              $location.url($location.path()); //Remove query parameters from URL bar
               deferred.resolve(user.data);
             }, function(error) {
               deferred.reject(error);

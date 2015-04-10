@@ -3,10 +3,10 @@
 
 /**
  * @ngdoc function
- * @name hyenaAppsApp.controller:ApplicationCtrl
+ * @name hyenaAngular.controller:ApplicationCtrl
  * @description
  * # ApplicationCtrl
- * Controller of the hyenaAppsApp
+ * Controller of the hyenaAngular
  */
 angular.module("hyenaAngular")
   .controller('ApplicationCtrl', function ($rootScope, $scope, $location, $state, $window, $firebase, AuthService, UserService, AppFirebase, Notification, FBURL, AUTH_EVENTS, AUTH_SCOPE) {
@@ -21,11 +21,12 @@ angular.module("hyenaAngular")
      * If it is, it will go through the auth flow and attach auth events.
      */
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+      $scope.appLoaded = false;
       //Check and see if we should authenticate
       if(angular.isDefined(toState.data) && angular.isDefined(toState.data.requireAuth))
       {
         //Set a global variable accessible in other controllers
-        $scope.requireAuth = toState.data.requireAuth;
+        $scope.requireAuth = toState.data.requireAuth || false;
 
         //No need to reauth if already authenticated
         if($scope.currentUser === null && toState.data.requireAuth)
@@ -37,6 +38,10 @@ angular.module("hyenaAngular")
           }, function(response) {
             console.error('There was an error logging in.', response);
           });
+        }
+        else
+        {
+          $scope.appLoaded = true;
         }
       }
     });
@@ -130,7 +135,7 @@ angular.module("hyenaAngular")
      * @param  string path                  href to location
      * @param  string pageAnimationClass    CSS animation class
      */
-    $scope.go = function (path, pageAnimationClass) {
+    $scope.go = function (path, params, pageAnimationClass) {
       if (typeof(pageAnimationClass) === 'undefined') { // Use a default, your choice
           $scope.pageAnimationClass = 'animate-slide-right';
       } 
@@ -143,7 +148,8 @@ angular.module("hyenaAngular")
           $window.history.back();
       }    
       else { // Go to the specified path
-          $location.path(path);
+          console.log('Animation Class', $scope.pageAnimationClass);
+          $state.go(path, params);
       }
     };
 

@@ -52,6 +52,17 @@ angular.module('hyenaAngular')
 				APIPATH+'groups/'+groupId+'/users?'+tokenString+'&'+apiString, users);
 		},
 		/**
+		 * Updates sing user in a group
+		 * @param  string groupId  Group ID
+		 * @param  string userId   BB username
+		 * @param  object userData
+		 * @return promise
+		 */
+		usersUpdate: function usersUpdate(groupId, userId, userData) {
+			return $http.put(
+				APIPATH+'groups/'+groupId+'/users/'+userId+'?'+apiString+'&'+tokenString, userData);
+		},
+		/**
 		 * Removes users from group
 		 * @param  int 		groupId 	Group ID
 		 * @param  array  	users   	Array of NUIDs or BB usernames to remove
@@ -70,7 +81,15 @@ angular.module('hyenaAngular')
 		hasUser: function hasUser(groupId, userId) {
 			return $http.get(
 				APIPATH+'groups/'+groupId+'/users/'+userId+'?'+apiString);
-		}
+		},
+		appsAdd: function appsAdd(groupId, apps) {
+			return $http.post(
+				APIPATH+'groups/'+groupId+'/apps?'+apiString+'&'+tokenString, apps);
+		},
+		appsRemove: function appsRemove(groupId, apps) {
+			return $http.post(
+				APIPATH+'groups/'+groupId+'/apps/delete?'+apiString+'&'+tokenString, apps);
+		},
   	};
 
   	return GroupService;
