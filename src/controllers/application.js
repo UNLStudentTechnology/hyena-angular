@@ -29,8 +29,7 @@ angular.module("hyenaAngular")
         $scope.requireAuth = toState.data.requireAuth || false;
 
         //No need to reauth if already authenticated
-        if($scope.currentUser === null && toState.data.requireAuth)
-        {
+        if($scope.currentUser === null && toState.data.requireAuth) {
           //Start auth flow
           AuthService.flow(AUTH_SCOPE).then(function(response) {
             $scope.appLoaded = true;
@@ -39,8 +38,7 @@ angular.module("hyenaAngular")
             console.error('There was an error logging in.', response);
           });
         }
-        else
-        {
+        else {
           $scope.appLoaded = true;
         }
       }
@@ -135,7 +133,7 @@ angular.module("hyenaAngular")
      * @param  string path                  href to location
      * @param  string pageAnimationClass    CSS animation class
      */
-    $scope.go = function (path, params, pageAnimationClass) {
+    $scope.go = function (path, pageAnimationClass) {
       if (typeof(pageAnimationClass) === 'undefined') { // Use a default, your choice
           $scope.pageAnimationClass = 'animate-slide-right';
       } 
@@ -148,8 +146,7 @@ angular.module("hyenaAngular")
           $window.history.back();
       }    
       else { // Go to the specified path
-          console.log('Animation Class', $scope.pageAnimationClass);
-          $state.go(path, params);
+          $location.path(path);
       }
     };
 
